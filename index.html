@@ -485,31 +485,73 @@
     }
 
     async function loadTournaments() {
-      clearMessage(loadMessage);
+  clearMessage(loadMessage);
 
-      try {
-        const result = await supabaseClient
-          .from("tournaments")
-          .select("id,name,game_name,mode,prize_pool,entry_fee,match_time,slots,status")
-          .eq("status", "upcoming")
-          .order("id", { ascending: true });
+  // Show a timeout instead of loading forever.
+  let timer;
 
-        if (result.error) throw result.error;
+  try {
+    const request = supabaseClient
+      .from("tournaments")
+      .select("id,name,game_name,mode,prize_pool,entry_fee,match_time,slots,status")
+      .eq("status", "upcoming")
+      .order("id", { ascending: true });
 
-        tournaments = result.data || [];
-        renderTournaments();
-      } catch (error) {
-        list.replaceChildren();
-        addText(list, "p",
-          "Unable to load tournaments. Please try again later.",
-          "loading");
+    const timeout = new Promise((_, reject) => {
+      timer = setTimeout(() => {
+        reject(new Error(
+          "TIMEOUT: Supabase response nahi de raha. Network aur project URL check karein."
+        ));
+      }, 12000);
+    });
 
-        showMessage(loadMessage,
-          "Database error: " + (error.message || "Unknown error"),
-          "error");
-      }
+    const result = await Promise.race([request, timeout]);
+
+    if (result.error) {
+      throw new Error(
+        "Supabase error: " +
+        result.error.message +
+        (result.error.code ? " | Code: " + result.error.code : "")
+      );
     }
 
+    tournaments = result.data || [];
+    renderTournaments();
+
+    if (tournaments.length === 0) {
+      showMessage(
+        loadMessage,
+        "Connection successful, lekin status upcoming wala koi tournament nahi mila.",
+        "error"
+      );
+    } else {
+      showMessage(
+        loadMessage,
+        "Connected! " + tournaments.length + " tournament(s) loaded.",
+        "success"
+      );
+    }
+  } catch (error) {
+    list.replaceChildren();
+
+    addText(
+      list,
+      "p",
+      "Tournament load nahi hua.",
+      "loading"
+    );
+
+    showMessage(
+      loadMessage,
+      error.message || "Unknown error",
+      "error"
+    );
+  } finally {
+    clearTimeout(timer);
+  }
+}
+    
+    
     form.addEventListener("submit", async function(event) {
       event.preventDefault();
       clearMessage(formMessage);
