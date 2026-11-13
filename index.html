@@ -1,0 +1,616 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b09">
+  <meta name="description" content="ProBattle India - Free Fire esports tournaments, team registration and match updates.">
+  <title>ProBattle India | Esports Tournaments</title>
+
+  <style>
+    :root {
+      --bg: #080b09;
+      --panel: #111713;
+      --gold: #ffd447;
+      --green: #58ed91;
+      --muted: #a2ada5;
+      --border: #29342c;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: #f5f7f5;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button, input, select { font: inherit; }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #080b09f2;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .logo {
+      font-weight: 900;
+      font-size: 19px;
+      color: var(--gold);
+      letter-spacing: .3px;
+    }
+
+    .logo span { color: white; }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    nav a:hover { color: var(--gold); }
+
+    .hero {
+      padding: 65px 0 45px;
+      background:
+        radial-gradient(ellipse at 85% 10%, #245b3433, transparent 45%),
+        radial-gradient(ellipse at 5% 90%, #8c6b1922, transparent 45%);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 8px 12px;
+      border: 1px solid #4b563b;
+      border-radius: 30px;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    h1 {
+      font-size: clamp(36px, 7vw, 66px);
+      line-height: 1.06;
+      margin: 22px 0 15px;
+      letter-spacing: -2px;
+    }
+
+    h1 span { color: var(--gold); }
+
+    .hero p {
+      max-width: 560px;
+      line-height: 1.7;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 25px;
+    }
+
+    .btn {
+      display: inline-block;
+      border: 0;
+      border-radius: 9px;
+      padding: 13px 18px;
+      font-weight: bold;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .primary {
+      background: var(--gold);
+      color: #11140e;
+    }
+
+    .secondary {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: white;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .stat {
+      background: #111713cc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 17px 10px;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--gold);
+      font-size: 21px;
+    }
+
+    .stat small {
+      display: block;
+      color: var(--muted);
+      margin-top: 7px;
+      font-size: 11px;
+    }
+
+    section { padding: 38px 0; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    h2 {
+      font-size: 25px;
+      margin: 0 0 8px;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .game-icon {
+      font-size: 26px;
+      background: #253127;
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .status {
+      color: var(--green);
+      background: #163423;
+      border-radius: 20px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .card h3 { margin: 0 0 7px; font-size: 19px; }
+
+    .card p { color: var(--muted); font-size: 13px; }
+
+    .details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px;
+      padding: 17px 0;
+      margin: 17px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .details small {
+      color: var(--muted);
+      display: block;
+      margin-bottom: 5px;
+      font-size: 11px;
+    }
+
+    .details strong { font-size: 15px; }
+
+    .full { width: 100%; }
+
+    .empty {
+      color: var(--muted);
+      font-size: 13px;
+      padding: 22px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .form-wrap {
+      max-width: 650px;
+      margin: auto;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 23px;
+      border-radius: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field label { font-size: 12px; color: #dbe3dc; }
+
+    .field input, .field select {
+      width: 100%;
+      background: #090d0a;
+      border: 1px solid var(--border);
+      color: white;
+      padding: 13px;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .field input:focus, .field select:focus {
+      border-color: var(--green);
+    }
+
+    .form-grid .wide { grid-column: 1 / -1; }
+
+    .notice {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 15px;
+    }
+
+    #message {
+      display: none;
+      margin-top: 15px;
+      padding: 13px;
+      border-radius: 8px;
+      background: #163423;
+      color: var(--green);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 13px;
+    }
+
+    .feature {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 17px;
+    }
+
+    .feature .emoji { font-size: 24px; }
+
+    .feature h3 { font-size: 15px; }
+
+    .feature p {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 26px 0;
+      margin-top: 25px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 600px) {
+      .nav { min-height: 62px; }
+      .logo { font-size: 16px; }
+      nav { gap: 10px; font-size: 11px; }
+      .hero { padding-top: 45px; }
+      .cards, .features { grid-template-columns: 1fr; }
+      .stats { gap: 7px; }
+      .stat strong { font-size: 17px; }
+      .stat small { font-size: 10px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .wide { grid-column: auto; }
+      .section-head { align-items: start; flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav">
+      <a class="logo" href="#home">PROBATTLE <span>INDIA</span></a>
+      <nav>
+        <a href="#home">Home</a>
+        <a href="#tournaments">Matches</a>
+        <a href="#register">Register</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="container">
+        <span class="tag">🎮 ESPORTS TOURNAMENT PLATFORM</span>
+        <h1>PLAY TO WIN.<br><span>RISE TO GLORY.</span></h1>
+        <p>
+          Welcome to ProBattle India. Discover tournaments,
+          register your squad and prepare to compete.
+          Your next battle starts here.
+        </p>
+
+        <div class="actions">
+          <a class="btn primary" href="#tournaments">Explore Tournaments ↗</a>
+          <a class="btn secondary" href="#register">Join a Match</a>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <strong>24/7</strong>
+            <small>Platform Access</small>
+          </div>
+          <div class="stat">
+            <strong>Squad</strong>
+            <small>Team Competition</small>
+          </div>
+          <div class="stat">
+            <strong>India</strong>
+            <small>Our Community</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tournaments">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <h2>🏆 Tournaments</h2>
+            <p class="sub">Choose a match and register your team.</p>
+          </div>
+          <span class="tag">BATTLE ARENA</span>
+        </div>
+
+        <div class="cards" id="tournamentList">
+          <article class="card">
+            <div class="card-top">
+              <span class="game-icon">🎯</span>
+              <span class="status">DEMO MATCH</span>
+            </div>
+            <h3>Battle Royale Scrims</h3>
+            <p>Squad match · Practice tournament</p>
+            <div class="details">
+              <div>
+                <small>Prize Pool</small>
+                <strong>To be announced</strong>
+              </div>
+              <div>
+                <small>Entry Fee</small>
+                <strong>Free demo</strong>
+              </div>
+              <div>
+                <small>Match Time</small>
+                <strong>To be announced</strong>
+              </div>
+              <div>
+                <small>Slots</small>
+                <strong>Subject to setup</strong>
+              </div>
+            </div>
+            <button class="btn primary full" type="button"
+              onclick="chooseTournament('Battle Royale Scrims')">
+              Register Now
+            </button>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <span class="game-icon">⚡</span>
+              <span class="status">DEMO MATCH</span>
+            </div>
+            <h3>Pro Squad Challenge</h3>
+            <p>Team match · Competitive practice</p>
+            <div class="details">
+              <div>
+                <small>Prize Pool</small>
+                <strong>To be announced</strong>
+              </div>
+              <div>
+                <small>Entry Fee</small>
+                <strong>Free demo</strong>
+              </div>
+              <div>
+                <small>Match Time</small>
+                <strong>To be announced</strong>
+              </div>
+              <div>
+                <small>Slots</small>
+                <strong>Subject to setup</strong>
+              </div>
+            </div>
+            <button class="btn primary full" type="button"
+              onclick="chooseTournament('Pro Squad Challenge')">
+              Register Now
+            </button>
+          </article>
+        </div>
+
+        <p class="notice">
+          These are sample tournaments for website testing.
+          No actual match, prize or slot is confirmed yet.
+        </p>
+      </div>
+    </section>
+
+    <section id="register">
+      <div class="container">
+        <div class="form-wrap">
+          <h2>📝 Player Registration</h2>
+          <p class="sub">Enter your details to prepare your registration.</p>
+
+          <form id="registrationForm">
+            <div class="form-grid">
+              <div class="field">
+                <label for="playerName">Player Name *</label>
+                <input id="playerName" name="playerName"
+                  maxlength="40" required placeholder="Enter your name">
+              </div>
+
+              <div class="field">
+                <label for="gameUid">Free Fire UID *</label>
+                <input id="gameUid" name="gameUid"
+                  inputmode="numeric" pattern="[0-9]{5,20}"
+                  maxlength="20" required placeholder="Your numeric UID">
+              </div>
+
+              <div class="field">
+                <label for="teamName">Team Name *</label>
+                <input id="teamName" name="teamName"
+                  maxlength="40" required placeholder="Enter squad name">
+              </div>
+
+              <div class="field">
+                <label for="tournament">Select Tournament *</label>
+                <select id="tournament" name="tournament" required>
+                  <option value="">Choose tournament</option>
+                  <option value="Battle Royale Scrims">Battle Royale Scrims</option>
+                  <option value="Pro Squad Challenge">Pro Squad Challenge</option>
+                </select>
+              </div>
+
+              <div class="field wide">
+                <label for="contact">Contact Email (optional)</label>
+                <input id="contact" name="contact" type="email"
+                  maxlength="100" placeholder="you@example.com">
+              </div>
+
+              <div class="field wide">
+                <button class="btn primary full" type="submit">
+                  Prepare Registration
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <div id="message" role="status" aria-live="polite"></div>
+
+          <p class="notice">
+            This is a demo form. Your information is not sent or saved
+            to a server. Database registration will be added in the
+            next development step.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <h2>🚀 Platform Features</h2>
+        <p class="sub" style="margin-bottom:20px">
+          The features we will build step by step.
+        </p>
+
+        <div class="features">
+          <div class="feature">
+            <div class="emoji">🏆</div>
+            <h3>Tournaments</h3>
+            <p>View upcoming matches and tournament details.</p>
+          </div>
+          <div class="feature">
+            <div class="emoji">👥</div>
+            <h3>Player Registration</h3>
+            <p>Collect player UID and squad details securely.</p>
+          </div>
+          <div class="feature">
+            <div class="emoji">🛡️</div>
+            <h3>Admin Panel</h3>
+            <p>Manage tournaments, registrations and results.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <strong>PROBATTLE INDIA</strong><br>
+      Built for the esports community.<br>
+      This is an independent fan project and is not an official
+      Garena Free Fire product.
+      <br><br>
+      © <span id="year"></span> ProBattle India
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    function chooseTournament(name) {
+      document.getElementById("tournament").value = name;
+      document.getElementById("register").scrollIntoView({
+        behavior: "smooth"
+      });
+    }
+
+    document.getElementById("registrationForm")
+      .addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const message = document.getElementById("message");
+        message.style.display = "block";
+        message.textContent =
+          "Demo only: your form has been checked in this browser, " +
+          "but registration has NOT been submitted or saved. " +
+          "Connect Supabase to enable real registration.";
+      });
+  </script>
+</body>
+</html>
